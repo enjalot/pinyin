@@ -7,16 +7,35 @@
   </head>
   <body>
     <div id="explanation">
-      Pinyin is one of the most used keyboard input systems for typing Chinese characters.
+      <p>
+        <a target=_blank href="http://en.wikipedia.org/wiki/Pinyin">Pinyin</a> is one of the most used keyboard input systems for typing Mandarin Chinese characters.
+      </p>
+      <p>
+        In Pinyin all characters are composed of
+        <span>initials</span> and <span>finals</span> TODO
+      </p>
+      <p>
+        Mandarin Chinese has 5 distinct <span>tones</span>. TODO
+      </p>
     </div>
     <div id="text">
       <input class="pinyin" maxlength=5></input>
       <div class="count"><span class=number></span> characters<span class="filler">.</span>
       <span class=value></span></div>
     </div>
-    <div id="bupo"></div>
-    <div id="finals"></div>
+    <div id="histos">
+      <div id="initials"></div>
+      <div id="finals"></div>
+    </div>
     <div id="chars"></div>
+    <div id="conclusion">
+      TODO: explain Technology used
+      <p>
+        CEDICT<br>
+        crossfilter<br>
+        d3<br>
+      </p>
+    </div>
     <script>
       d3.csv("data/cedict-singles.csv", function(err, data) {
         console.log("data", data.length);
@@ -27,7 +46,7 @@
         input.on("keyup", filter);
 
         var histoStarts = histo();
-        histoStarts(d3.select("#bupo"));
+        histoStarts(d3.select("#initials"));
         console.log("histo starts", histoStarts)
         var histoEnds = histo();
         histoEnds(d3.select("#finals"))
@@ -52,6 +71,16 @@
             txt.select(".filler").text(".")
           }
 
+          var chars = d3.select("#chars")
+            .selectAll(".char").data(xf.top(100))
+          chars.enter()
+          .append("span").classed("char", true)
+          .on("click", function(d) {
+            console.log("char:", d)
+          })
+          chars.text(function(d) { return d.char })
+          chars.exit().remove()
+
           var start = getInitial(value);
           var end = getFinal(value);
           console.log("start", start, "end", end);
@@ -65,7 +94,6 @@
           histoStarts.update()
           histoEnds.data(groups.ends);
           histoEnds.update()
-
         }
       })
     </script>

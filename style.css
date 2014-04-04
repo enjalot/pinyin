@@ -3,12 +3,21 @@ input.pinyin {
   font-size: 30px;
 }
 
+#text {
+  margin: 20px;
+}
 #text .number {
   color: "#646464";
   font-weight: 400;
 }
 #text .value {
   font-weight: 700;
+}
+#histos {
+  height: 250px;
+}
+#conclusion {
+  margin: 20px;
 }
 
 .bars {
@@ -19,14 +28,14 @@ input.pinyin {
   display: block;
   float: left;
 }
-#bupo .bar {
+#initials .bar {
   background-color: red;
 }
 
 #finals .bar {
   background-color: green;
 }
-#bupo {
+#initials {
   float:left;
 }
 #finals {
