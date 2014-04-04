@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <script src="lib/d3.min.js"></script>
+    <script src="lib/crossfilter.v1.min.js"></script>
+    <script src="pinyin.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css"></link>
+  </head>
+  <body>
+    <div id="explanation">
+      Pinyin is one of the most used keyboard input systems for typing Chinese characters.
+    </div>
+    <div id="text">
+      <input class="pinyin" maxlength=5></input>
+      <div class="count"><span class=number></span> characters<span class="filler">.</span>
+      <span class=value></span></div>
+    </div>
+    <div id="bupo"></div>
+    <div id="finals"></div>
+    <div id="chars"></div>
+    <script>
+      d3.csv("data/cedict-singles.csv", function(err, data) {
+        console.log("data", data.length);
+        var xf = cross();
+        xf(data);
+
+        var input = d3.select("input.pinyin");
+        input.on("keyup", filter);
+
+        var histoStarts = histo();
+        histoStarts(d3.select("#bupo"));
+        console.log("histo starts", histoStarts)
+        var histoEnds = histo();
+        histoEnds(d3.select("#finals"))
+        console.log("histo ends", histoEnds)
+
+        filter();
+        function filter() {
+          var value = input.node().value;
+          console.log("value", value);
+
+          //xf.clear()
+          xf.filterMatch(value);
+          var matches = xf.top(Infinity);
+          console.log("matches", matches.length, matches)
+          var txt = d3.select("#text")
+          txt.select(".number").text(matches.length);
+          txt.select(".value").text(value)
+          console.log("value", value)
+          if(value) {
+            txt.select(".filler").text(" match ")
+          } else {
+            txt.select(".filler").text(".")
+          }
+
+          var start = getInitial(value);
+          var end = getFinal(value);
+          console.log("start", start, "end", end);
+          bupomofu();
+        }
+
+        function bupomofu(start, end) {
+          var groups = xf.groups();
+          console.log("groups111", groups)
+          histoStarts.data(groups.starts);
+          histoStarts.update()
+          histoEnds.data(groups.ends);
+          histoEnds.update()
+
+        }
+      })
+    </script>
+  </body>
+</html>

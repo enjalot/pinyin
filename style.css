@@ -1,0 +1,35 @@
+input.pinyin {
+  width: 120px;
+  font-size: 30px;
+}
+
+#text .number {
+  color: "#646464";
+  font-weight: 400;
+}
+#text .value {
+  font-weight: 700;
+}
+
+.bars {
+  position: absolute;
+}
+.bar {
+  width: 20px;
+  display: block;
+  float: left;
+}
+#bupo .bar {
+  background-color: red;
+}
+
+#finals .bar {
+  background-color: green;
+}
+#bupo {
+  float:left;
+}
+#finals {
+  float: left;
+  margin-top: 100px;
+}
