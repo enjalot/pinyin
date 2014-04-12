@@ -4,8 +4,15 @@
     <script src="lib/crossfilter.v1.min.js"></script>
     <script src="pinyin.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css"></link>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,600' rel='stylesheet' type='text/css'>
   </head>
   <body>
+
+<template id="body">
+<div id=container>
+<div id=content>
+  <h1>How typing in Chinese works</h1>
     <div id="explanation">
       <p>
         <a target=_blank href="http://en.wikipedia.org/wiki/Pinyin">Pinyin</a> is one of the most used keyboard input systems for typing Mandarin Chinese characters.
@@ -18,82 +25,126 @@
         Mandarin Chinese has 5 distinct <span>tones</span>. TODO
       </p>
     </div>
+
     <div id="text">
-      <input class="pinyin" maxlength=5></input>
-      <div class="count"><span class=number></span> characters<span class="filler">.</span>
-      <span class=value></span></div>
+      <h2>Try typing some Pinyin</h2>
+      <input class="pinyin" maxlength="5" value={{_page.pinyin}} on-keyup="filter()">
+      <div class="count">
+        <span class="number">{{_page.numMatches}}</span>
+        <span class="filler">{{if _page.pinyin}} characters match {{else}} possible characters{{/if}}</span>
+        <span class="start">{{_page.start}}</span><span class="end">{{_page.end}}</span>.
+      </div>
     </div>
+
+    <!--
+    -->
+
     <div id="histos">
-      <div id="initials"></div>
-      <div id="finals"></div>
+      <div id="initials">
+        <h2>Possible word beginnings</h2>
+        <view name=histo data={{_page.initialGroups.starts}} selection={{_page.groups.starts}} height=100></view>
+      </div>
+      <div id="finals">
+        <h2>Possible word endings</h2>
+        <view name=histo data={{_page.initialGroups.ends}} selection={{_page.groups.ends}} height=100></view>
+      </div>
+      <div id="tones">
+        <h2>Possible tones</h2>
+        <view name=histo data={{_page.initialGroups.tones}} selection={{_page.groups.tones}} height=100></view>
+      </div>
+
     </div>
-    <div id="chars"></div>
+    <div id="chars">
+      <h2>Matching Characters <span class=count>({{if _page.numMatches > 100}}100+{{else}}{{_page.numMatches}}{{/if}})</span></h2>
+      <div>
+      {{each _page.chars as #char}}
+        <span class=char>{{#char.char}}</span>
+      {{/each}}
+
+      <br>
+      </div>
+    </div>
     <div id="conclusion">
       TODO: explain Technology used
       <p>
         CEDICT<br>
         crossfilter<br>
         d3<br>
+derby<br>
+
+twitter, derby
       </p>
     </div>
+</div>
+</div>
+</template>
+
+<template id="histo" attributes="data selection height">
+  <div class="bars">
+    {{each layout as #d,#i}}
+      <div class="bar-container">
+        <div class="bar" style="height:{{#d.height}}px;top:{{#d.y}}px;">
+          <div class="inner" style="height:{{#d.selectionHeight}}px;top:{{#d.selectionY}}px;"></div>
+        </div>
+        <div class="letter" style="opacity:{{if +#d.selectionHeight}}1{{else}}0.3{{/}}">{{data[#i].key || "&nbsp"}}</div>
+      </div>
+    {{/each}}
+  </div>
+</template>
+
+    <script src="lib/derby-standalone.min.js"></script>
     <script>
+      // setup standalone derby
+      var app = derby.createApp();
+      // setup our templates
+      //var templates = document.querySelectorAll('script[type="text/template"]');
+      var templates = document.querySelectorAll('template');
+      for (var i = 0; i < templates.length; i++) {
+        var template = templates[i];
+        app.views.register(template.id, template.innerHTML, template.dataset);
+      }
+
+      // setup our histogram component
+      app.component("histo", Histogram);
+      // create the page and make a version
+      var page = app.createPage();
+      var model = window.MODEL = page.model;
+
+      model.set("_page.pinyin", "");
+      model.set("_page.loadingSingles", true)
+
+      document.body.appendChild(page.getFragment('body'));
+
+      // get some data asynchronously!
       d3.csv("data/cedict-singles.csv", function(err, data) {
         console.log("data", data.length);
+        model.set("_page.loadingSingles", false)
+
+        // Controller code
         var xf = cross();
         xf(data);
 
-        var input = d3.select("input.pinyin");
-        input.on("keyup", filter);
+        model.set("_page.initialGroups", xf.groups())
 
-        var histoStarts = histo();
-        histoStarts(d3.select("#initials"));
-        console.log("histo starts", histoStarts)
-        var histoEnds = histo();
-        histoEnds(d3.select("#finals"))
-        console.log("histo ends", histoEnds)
-
+        app.proto.filter = filter;
         filter();
         function filter() {
-          var value = input.node().value;
-          console.log("value", value);
+          var value = model.get("_page.pinyin");
 
-          //xf.clear()
           xf.filterMatch(value);
           var matches = xf.top(Infinity);
-          console.log("matches", matches.length, matches)
-          var txt = d3.select("#text")
-          txt.select(".number").text(matches.length);
-          txt.select(".value").text(value)
-          console.log("value", value)
-          if(value) {
-            txt.select(".filler").text(" match ")
-          } else {
-            txt.select(".filler").text(".")
-          }
-
-          var chars = d3.select("#chars")
-            .selectAll(".char").data(xf.top(100))
-          chars.enter()
-          .append("span").classed("char", true)
-          .on("click", function(d) {
-            console.log("char:", d)
-          })
-          chars.text(function(d) { return d.char })
-          chars.exit().remove()
+          model.set("_page.numMatches", matches.length);
+          model.set("_page.chars", xf.top(100).sort(function(a,b) { return (+b.count) - (+a.count); }))
 
           var start = getInitial(value);
           var end = getFinal(value);
-          console.log("start", start, "end", end);
-          bupomofu();
-        }
+          var tone = getTone(tone);
+          model.set("_page.start", start);
+          model.set("_page.end", end);
+          model.set("_page.tone", tone);
 
-        function bupomofu(start, end) {
           var groups = xf.groups();
-          console.log("groups111", groups)
-          histoStarts.data(groups.starts);
-          histoStarts.update()
-          histoEnds.data(groups.ends);
-          histoEnds.update()
+          model.set("_page.groups", groups)
         }
       })
     </script>

@@ -1,10 +1,57 @@
+body {
+  font-family: 'Source Sans Pro', "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 16px;
+  color: #818181;
+  padding: 40px;
+}
+
+p {
+  color: #818181;
+}
+
+a {
+  color: #8bb0be;
+}
+
 input.pinyin {
   width: 120px;
   font-size: 30px;
+  font-family: 'Source Sans Pro', "Helvetica Neue", Helvetica, sans-serif;
+  font-weight: 400;
+  outline: none;
+  box-shadow: none;
+  border: 1px solid #ebebeb;
+  border-radius: 6px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: 48px;
+  font-weight: normal;
+  color: #444444;
+}
+h2 {
+  font-weight: 400;
+  font-size: 24px;
+  border-bottom: 1px solid #ebebeb;
+  padding-bottom: 8px;
+  padding-top: 20px;
+  color: #444444;
+}
+.count {
+  font-size: 16px;
+  color: #818181;
+  padding-left: 5px;
+}
+
+#content {
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 #text {
-  margin: 20px;
+  font-size: 16px;
 }
 #text .number {
   color: "#646464";
@@ -14,31 +61,69 @@ input.pinyin {
   font-weight: 700;
 }
 #histos {
-  height: 250px;
 }
 #conclusion {
-  margin: 20px;
+  margin-top: 30px;
 }
 
-.bars {
-  position: absolute;
+.bar-container {
+  width: 28px;
+  margin: 0px 3px;
+  font-size: 12px;
+  display: inline-block;
 }
-.bar {
-  width: 20px;
-  display: block;
-  float: left;
+.letter {
+  font-family: 'Source Code Pro', "Helvetica Neue", Helvetica, sans-serif;
+  color: #818181;
+  height: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.start {
+  color: #be8b8b;
+}
+.end {
+  color: #8bbea6;
+}
+.tone {
+  color: rgb(120,160,177);
+}
+.inner {
+  width: 100%;
+  position:relative;
 }
 #initials .bar {
-  background-color: red;
+  background-color: #e5d1d1;
+}
+#initials .inner {
+  background-color: #be8b8b;
 }
 
 #finals .bar {
-  background-color: green;
+  background-color: #cee3d9;
 }
-#initials {
-  float:left;
+#finals .inner {
+  background-color: #8bbea6;
 }
-#finals {
-  float: left;
-  margin-top: 100px;
+#tones .bar {
+  background-color: rgb(199,216,223);
+}
+#tones .inner {
+  background-color: rgb(120,160,177);
+}
+
+
+#chars {
+  min-height: 300px;
+  margin-top: 30px;
+}
+.char {
+  padding: 0px 4px;
+  font-size: 30px;
+  font-weight: 400;
+  font-family: 'Yuanti SC', 'Yuanti TC', sans-serif;
+  /*font-family: 'Xingkai SC', 'Xingkai TC';*/
+  /*font-family: 'Wawati SC', 'Wawati TC';*/
 }
