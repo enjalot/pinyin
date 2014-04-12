@@ -1,8 +1,10 @@
 <html>
   <head>
+    <title>How does typing in Chinese work?</title>
     <script src="lib/d3.min.js"></script>
     <script src="lib/crossfilter.v1.min.js"></script>
     <script src="pinyin.js"></script>
+    <script src="histogram.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css"></link>
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,600' rel='stylesheet' type='text/css'>
@@ -12,27 +14,39 @@
 <template id="body">
 <div id=container>
 <div id=content>
-  <h1>How typing in Chinese works</h1>
+  <h1>How does typing in Chinese work?</h1>
     <div id="explanation">
       <p>
-        <a target=_blank href="http://en.wikipedia.org/wiki/Pinyin">Pinyin</a> is one of the most used keyboard input systems for typing Mandarin Chinese characters.
+      You may have heard that there are thousands of Chinese characters and wondered how big the keyboards must be in China. Long before computers, a system for writing Chinese characters using Roman letters was devised so that Chinese could be written phonetically.
+      </p>
+      <p>
+      The most recent and the official system for representing Chinese characters as letters is called <a target=_blank href="http://en.wikipedia.org/wiki/Pinyin">Pinyin</a>. It isn't the only way to type Chinese, but it is the most common.
       </p>
       <p>
         In Pinyin all characters are composed of
-        <span>initials</span> and <span>finals</span> TODO
+         <span class="start"> initials</span> and <span class="end">finals</span>. The initials (start of the word) are most of the consanants we are used to, plus some sounds such as "sh". The finals (end of the word) represent various pronounciations in Chinese, many of which are not commonly found in English.
       </p>
       <p>
-        Mandarin Chinese has 5 distinct <span>tones</span>. TODO
+        Mandarin Chinese has 5 distinct <span class="tone">tones</span>. These can be represented with a number 1 through 4, the 5th tone is actually the absence of a tone.
+      </p>
+      <p>
+        Many Characters can share the same pinyin spelling (because they share pronounciation). You can explore how much overlap there is, as well as see how quickly you can get to any particular character by typing a few letters.
       </p>
     </div>
 
     <div id="text">
       <h2>Try typing some Pinyin</h2>
-      <input class="pinyin" maxlength="5" value={{_page.pinyin}} on-keyup="filter()">
+      <input id="pinyin" class="pinyin" maxlength="5" value={{_page.pinyin}} on-keyup="filter()" on-click="clicker()">
+      <div class="examples">
+        e.g.
+        <span class="example">我: wo3</span>
+        <span class="example">爱: ai4</span>
+        <span class="example">你: ni3</span>
+      </div>
       <div class="count">
         <span class="number">{{_page.numMatches}}</span>
         <span class="filler">{{if _page.pinyin}} characters match {{else}} possible characters{{/if}}</span>
-        <span class="start">{{_page.start}}</span><span class="end">{{_page.end}}</span>.
+        <span class="start">{{_page.start}}</span><span class="end">{{_page.end}}</span><span class="end">{{_page.tone}}</span>.
       </div>
     </div>
 
@@ -40,17 +54,17 @@
     -->
 
     <div id="histos">
-      <div id="initials">
+      <div class="initials">
         <h2>Possible word beginnings</h2>
-        <view name=histo data={{_page.initialGroups.starts}} selection={{_page.groups.starts}} height=100></view>
+        <view name=histo data={{_page.initialGroups.starts}} selection={{_page.groups.starts}} height=80></view>
       </div>
-      <div id="finals">
+      <div class="finals">
         <h2>Possible word endings</h2>
-        <view name=histo data={{_page.initialGroups.ends}} selection={{_page.groups.ends}} height=100></view>
+        <view name=histo data={{_page.initialGroups.ends}} selection={{_page.groups.ends}} height=80></view>
       </div>
-      <div id="tones">
+      <div class="tones">
         <h2>Possible tones</h2>
-        <view name=histo data={{_page.initialGroups.tones}} selection={{_page.groups.tones}} height=100></view>
+        <view name=histo data={{_page.initialGroups.tones}} selection={{_page.groups.tones}} height=80></view>
       </div>
 
     </div>
@@ -65,20 +79,33 @@
       </div>
     </div>
     <div id="conclusion">
-      TODO: explain Technology used
+      <h2>How this page was built</h2>
       <p>
-        CEDICT<br>
-        crossfilter<br>
-        d3<br>
-derby<br>
-
-twitter, derby
+        The data for this project is derived from the open Chinese-English dictionary project <a target=_blank href="http://cc-cedict.org/wiki/">CEDICT</a>. All unique characters in the dictionary were extracted (and they are sorted by the number of times they appear).
       </p>
+      <p>
+        This is also a tech demo of a new feature of <a target=_blank href="http://derbyjs.com">Derby</a>, the <a target=_blank href="">standalone package</a>. This allows you to use Derby templates and reactive data binding without a server. The API is much nicer than Angular or Backbone, and the source has been commented to encourage others to try.
+      </p>
+      <p>
+      The project relies on <a target=_blank href="http://square.github.io/crossfilter/">crossfilter.js</a> to provide the interactive filtering and grouping of thousands of characters and their pinyin.
+      </p>
+      <p>
+        A little bit of <a target=_blank href="http://d3js.org/">d3.js</a> is used for the visualization, but only for calculating scales, data binding is handled by Derby<br>
+      </p>
+      <p>
+      written by <a href="https://twitter.com/enjalot">enjalot</a> for 
+        <a href="https://twitter.com/derbyjs"> derbyjs</a><br>
+        thanks to <a href="https://twitter.com/vicapow">vicapow</a> and <a href="https://twitter.com/andreasmb">andreasmb</a> for design help.
+      </p>
+
+      <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://enjalot.github.io/pinyin" data-text="How does typing in Chinese work?" data-via="enjalot">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
     </div>
 </div>
 </div>
 </template>
 
+<!-- such readability -->
 <template id="histo" attributes="data selection height">
   <div class="bars">
     {{each layout as #d,#i}}
@@ -86,6 +113,8 @@ twitter, derby
         <div class="bar" style="height:{{#d.height}}px;top:{{#d.y}}px;">
           <div class="inner" style="height:{{#d.selectionHeight}}px;top:{{#d.selectionY}}px;"></div>
         </div>
+        <div class="value" style="margin-top:{{if #d.height < 12}}{{-#d.height-14}}{{else}}{{-#d.height}}{{/}}px;{{if #d.height < 10}}color:#818181{{/}}">
+          {{selection[#i].value}}</div>
         <div class="letter" style="opacity:{{if +#d.selectionHeight}}1{{else}}0.3{{/}}">{{data[#i].key || "&nbsp"}}</div>
       </div>
     {{/each}}
@@ -94,6 +123,7 @@ twitter, derby
 
     <script src="lib/derby-standalone.min.js"></script>
     <script>
+      ////////////////////// <BOILER PLATE> ///////////////////////////////
       // setup standalone derby
       var app = derby.createApp();
       // setup our templates
@@ -103,31 +133,38 @@ twitter, derby
         var template = templates[i];
         app.views.register(template.id, template.innerHTML, template.dataset);
       }
-
-      // setup our histogram component
+      ////////////////////// </BOILER PLATE> ///////////////////////////////
+      // setup our histogram component (defined in histogram.js)
       app.component("histo", Histogram);
-      // create the page and make a version
+      // create the page and expose the model for use in the console
       var page = app.createPage();
+      console.log("Try MODEL.set('_page.pinyin', 'w')");
       var model = window.MODEL = page.model;
+      // render the main template
+      document.body.appendChild(page.getFragment('body'));
 
+
+      ///////////////////// CONTROLLER CODE ////////////////////////////////
       model.set("_page.pinyin", "");
       model.set("_page.loadingSingles", true)
 
-      document.body.appendChild(page.getFragment('body'));
+      // when the user clicks on the input this gets called
+      app.proto.clicker = function() {
+        location.href='#pinyin'
+      }
 
       // get some data asynchronously!
       d3.csv("data/cedict-singles.csv", function(err, data) {
-        console.log("data", data.length);
         model.set("_page.loadingSingles", false)
 
-        // Controller code
+        // crossfilter logic defined in pinyin.js
         var xf = cross();
         xf(data);
 
         model.set("_page.initialGroups", xf.groups())
 
+        // we setup an app function for use in the template (on-keyup of the input)
         app.proto.filter = filter;
-        filter();
         function filter() {
           var value = model.get("_page.pinyin");
 
@@ -138,7 +175,7 @@ twitter, derby
 
           var start = getInitial(value);
           var end = getFinal(value);
-          var tone = getTone(tone);
+          var tone = getTone(value);
           model.set("_page.start", start);
           model.set("_page.end", end);
           model.set("_page.tone", tone);
@@ -146,7 +183,8 @@ twitter, derby
           var groups = xf.groups();
           model.set("_page.groups", groups)
         }
-      })
+        filter();
+      });
     </script>
   </body>
 </html>

@@ -52,62 +52,9 @@ function getTone(pin) {
   for(var i = 0; i < 4; i++) {
     if(pin.indexOf(tones[i]) >= 0) return tones[i];
   }
-  if(pin) {
-    return "5";
-  }
   return "";
 }
 
-function Histogram() {}
-Histogram.prototype.init = function() {
-  var model = this.model;
-  model.setNull("data", []);
-  model.setNull("selection", []);
-  model.setNull("height", 100);
-
-  this.yScale = d3.scale.linear()
-    .range([0, model.get("height")]);
-  this.transform()
-};
-
-Histogram.prototype.create = function() {
-  var model = this.model;
-  var that = this;
-
-  // changes in values inside the array
-  model.on("all", "data**", function() {
-    that.transform()
-  })
-  model.on("all", "selection**", function() {
-    that.transform()
-  });
-};
-
-Histogram.prototype.transform = function() {
-  var model = this.model;
-  var that = this;
-  var data = model.get("data") || [];
-  var selection = model.get("selection") || [];
-
-  // this could be implemented as extent for a relative scale
-  var totalMax = d3.max(data, function(d) { return d.value }) || 0;
-  this.yScale.domain([0, totalMax]);
-
-  // update the layout
-  var layout = data.map(function(d,i) {
-    var sel = selection[i] || { value: 0 };
-    return {
-      //x: that.xScale(i),
-      y: that.yScale.range()[1] - that.yScale(d.value),
-      selectionY: that.yScale(d.value) - that.yScale(sel.value),
-      //width: that.xScale.rangeBand()/2,
-      height: that.yScale(d.value),
-      selectionHeight: that.yScale(sel.value)
-    }
-  })
-  // we do more computing in js (setDiffDeep) to avoid extra re-rendering
-  model.setDiffDeep("layout", layout);
-};
 
 function cross() {
   var xf = crossfilter();

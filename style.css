@@ -67,9 +67,8 @@ h2 {
 }
 
 .bar-container {
-  width: 28px;
+  width: 25px;
   margin: 0px 3px;
-  font-size: 12px;
   display: inline-block;
 }
 .letter {
@@ -79,38 +78,70 @@ h2 {
   text-align: center;
   text-transform: uppercase;
   margin-top: 2px;
+  font-size: 12px;
+}
+.value {
+  font-family: 'Source Code Pro', "Helvetica Neue", Helvetica, sans-serif;
+  color: #fff;
+  height: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  position: relative;
+  float:left;
+  width: 25px;
+  font-size: 8px;
 }
 
+input {
+}
+.histos {
+}
+.count {
+}
+.examples {
+  display: inline-block;
+  padding-left: 10px;
+}
+.example {
+  padding: 4px;
+  font-weight: 600;
+}
 .start {
   color: #be8b8b;
+  font-weight: 600;
 }
 .end {
   color: #8bbea6;
+  font-weight: 600;
 }
 .tone {
   color: rgb(120,160,177);
+  font-weight: 600;
 }
+
+
+
 .inner {
   width: 100%;
   position:relative;
 }
-#initials .bar {
+.initials .bar {
   background-color: #e5d1d1;
 }
-#initials .inner {
+.initials .inner {
   background-color: #be8b8b;
 }
 
-#finals .bar {
+.finals .bar {
   background-color: #cee3d9;
 }
-#finals .inner {
+.finals .inner {
   background-color: #8bbea6;
 }
-#tones .bar {
+.tones .bar {
   background-color: rgb(199,216,223);
 }
-#tones .inner {
+.tones .inner {
   background-color: rgb(120,160,177);
 }
 
