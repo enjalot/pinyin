@@ -119,8 +119,12 @@ input {
   font-weight: 600;
 }
 
-
-
+.bar {
+  border-radius: 2px 2px 0px 0px;
+}
+.highlight {
+  border: 1px solid #818181;
+}
 .inner {
   width: 100%;
   position:relative;

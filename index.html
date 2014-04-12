@@ -93,9 +93,11 @@
         A little bit of <a target=_blank href="http://d3js.org/">d3.js</a> is used for the visualization, but only for calculating scales, data binding is handled by Derby<br>
       </p>
       <p>
-      written by <a href="https://twitter.com/enjalot">enjalot</a> for 
-        <a href="https://twitter.com/derbyjs"> derbyjs</a><br>
-        thanks to <a href="https://twitter.com/vicapow">vicapow</a> and <a href="https://twitter.com/andreasmb">andreasmb</a> for design help.
+        Written by <a href="https://twitter.com/enjalot">enjalot</a> for 
+        <a href="https://twitter.com/derbyjs"> derbyjs</a>.
+      </p>
+      <p>
+        Thanks to <a href="https://twitter.com/andreasmb">andreasmb</a>, <a href="https://twitter.com/vicapow">vicapow</a> and <a href="http://twitter.com/shirleyxywu">shirleyxywu</a> for design help.
       </p>
 
       <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://enjalot.github.io/pinyin" data-text="How does typing in Chinese work?" data-via="enjalot">Tweet</a>
@@ -110,12 +112,12 @@
   <div class="bars">
     {{each layout as #d,#i}}
       <div class="bar-container">
-        <div class="bar" style="height:{{#d.height}}px;top:{{#d.y}}px;">
+        <div class="bar {{if #d.selectionHeight}}highlight{{/if}}" style="height:{{#d.height}}px;top:{{#d.y}}px;">
           <div class="inner" style="height:{{#d.selectionHeight}}px;top:{{#d.selectionY}}px;"></div>
         </div>
         <div class="value" style="margin-top:{{if #d.height < 12}}{{-#d.height-14}}{{else}}{{-#d.height}}{{/}}px;{{if #d.height < 10}}color:#818181{{/}}">
           {{selection[#i].value}}</div>
-        <div class="letter" style="opacity:{{if +#d.selectionHeight}}1{{else}}0.3{{/}}">{{data[#i].key || "&nbsp"}}</div>
+        <div class="letter" style="opacity:{{if +#d.selectionHeight}}1{{else}}0.3{{/}}">{{data[#i].key || "N/A"}}</div>
       </div>
     {{/each}}
   </div>

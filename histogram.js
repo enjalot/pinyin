@@ -41,10 +41,10 @@ Histogram.prototype.transform = function() {
   var layout = data.map(function(d,i) {
     var sel = selection[i] || { value: 0 };
     return {
-      y: that.yScale.range()[1] - that.yScale(d.value),
-      selectionY: that.yScale(d.value) - that.yScale(sel.value),
-      height: that.yScale(d.value),
-      selectionHeight: that.yScale(sel.value)
+      y: Math.round(that.yScale.range()[1] - that.yScale(d.value)),
+      selectionY: Math.round(that.yScale(d.value) - that.yScale(sel.value)),
+      height: Math.round(that.yScale(d.value)),
+      selectionHeight: Math.round(that.yScale(sel.value))
     }
   })
   // we do more computing in js (setDiffDeep) to avoid extra re-rendering.
