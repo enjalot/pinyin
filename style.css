@@ -157,8 +157,47 @@ input {
 .char {
   padding: 0px 4px;
   font-size: 30px;
+  height: 50px;
+  width: 50px;
+  display: inline-block;
   font-weight: 400;
+  cursor: pointer;
   font-family: 'Yuanti SC', 'Yuanti TC', sans-serif;
   /*font-family: 'Xingkai SC', 'Xingkai TC';*/
   /*font-family: 'Wawati SC', 'Wawati TC';*/
 }
+
+.char:hover {
+  font-weight: 600;
+  font-size: 35px;
+  margin-top: -7px;
+  -moz-transition:font-size 0.2s; /* Firefox 4 */
+  -webkit-transition:font-size 0.2s; /* Safari and Chrome */
+  -o-transition:font-size 0.2s;
+  transition: font-size 0.2s;
+}
+
+.selected-char {
+  font-size: 35px;
+  font-weight: 700;
+  color: #444;
+}
+
+.definition {
+  padding: 5px;
+  font-size: 16px;
+}
+.pin {
+  font-size: 22px;
+}
+.def-char {
+  font-size: 25px;
+}
+.sel-def-char {
+  font-size: 25px;
+  color: #444;
+}
+.def-char:hover {
+}
+
+

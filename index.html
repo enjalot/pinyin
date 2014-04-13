@@ -5,6 +5,7 @@
     <script src="lib/crossfilter.v1.min.js"></script>
     <script src="pinyin.js"></script>
     <script src="histogram.js"></script>
+    <script src="definition.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css"></link>
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,600' rel='stylesheet' type='text/css'>
@@ -72,10 +73,13 @@
       <h2>Matching Characters <span class=count>({{if _page.numMatches > 100}}100+{{else}}{{_page.numMatches}}{{/if}})</span></h2>
       <div>
       {{each _page.chars as #char}}
-        <span class=char>{{#char.char}}</span>
+      <div class="char {{if #char.char === _page.selectedChar.char}}selected-char{{/if}}" on-click="model.set('_page.selectedChar', #char)">{{#char.char}}</div>
       {{/each}}
-
       <br>
+      </div>
+      <div class="definitions">
+      
+        <view name="definition" char="{{_page.selectedChar}}"></view>
       </div>
     </div>
     <div id="conclusion">
@@ -123,6 +127,30 @@
   </div>
 </template>
 
+<template id="definition" attributes="char">
+  <div class="bars">
+    {{if @char.pinyin}}
+      <audio controls src="https://s3.amazonaws.com/pinyin/audio/{{@char.pinyin}}.mp3"></audio>
+    {{/if}}
+    <p>
+    {{if numDefinitions}}
+      {{numDefinitions}} Words with definitions.
+    {{else}}
+      Click on a character to see the words it belongs to and their definitions.
+    {{/if}}
+    </p>
+    {{each definition as #d,#i}}
+      <div class="definition">
+        {{each split(#d.char) as #ch}}
+          <span class="def-char {{if #ch === @char.char }}sel-def-char{{/if}}">{{#ch}}</span>
+        {{/each}}
+        <span style=padding:5px;>:</span>
+        <span class="pin">{{#d.pinyin}}</span> - <span class=def>{{#d.def}}</span>
+      </div>
+    {{/each}}
+  </div>
+</template>
+
     <script src="lib/derby-standalone.min.js"></script>
     <script>
       ////////////////////// <BOILER PLATE> ///////////////////////////////
@@ -138,6 +166,7 @@
       ////////////////////// </BOILER PLATE> ///////////////////////////////
       // setup our histogram component (defined in histogram.js)
       app.component("histo", Histogram);
+      app.component("definition", Definition);
       // create the page and expose the model for use in the console
       var page = app.createPage();
       console.log("Try MODEL.set('_page.pinyin', 'w')");
@@ -153,6 +182,10 @@
       // when the user clicks on the input this gets called
       app.proto.clicker = function() {
         location.href='#pinyin'
+      };
+      app.proto.filter = function() {};
+      app.proto.split = function(word) {
+        return word.split("");
       }
 
       // get some data asynchronously!
@@ -169,6 +202,7 @@
         app.proto.filter = filter;
         function filter() {
           var value = model.get("_page.pinyin");
+          model.set("_page.selectedChar", {"char":"",pinyin:""});
 
           xf.filterMatch(value);
           var matches = xf.top(Infinity);
