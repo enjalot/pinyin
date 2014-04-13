@@ -122,18 +122,31 @@ input {
 .bar {
   border-radius: 2px 2px 0px 0px;
 }
-.highlight {
-  border: 1px solid #818181;
-}
+
 .inner {
   width: 100%;
   position:relative;
+}
+.outside {
+  color:#818181;
+}
+.denominator {
+  border-top: 1px solid #ebebeb;
+  top: 2px;
+  position: relative;
+}
+.outside .denominator {
+  border-top: 1px solid #a5a5a5;
 }
 .initials .bar {
   background-color: #e5d1d1;
 }
 .initials .inner {
   background-color: #be8b8b;
+}
+.initials .highlight {
+  border: 1px solid #be8b8b;
+  border-radius: 2px 2px 0px 0px;
 }
 
 .finals .bar {
@@ -142,11 +155,19 @@ input {
 .finals .inner {
   background-color: #8bbea6;
 }
+.finals .highlight {
+  border: 1px solid #8bbea6;
+  border-radius: 2px 2px 0px 0px;
+}
 .tones .bar {
   background-color: rgb(199,216,223);
 }
 .tones .inner {
   background-color: rgb(120,160,177);
+}
+.tones .highlight {
+  border: 1px solid rgb(120,160,177);
+  border-radius: 2px 2px 0px 0px;
 }
 
 

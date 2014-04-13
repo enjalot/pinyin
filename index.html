@@ -119,8 +119,13 @@
         <div class="bar {{if #d.selectionHeight}}highlight{{/if}}" style="height:{{#d.height}}px;top:{{#d.y}}px;">
           <div class="inner" style="height:{{#d.selectionHeight}}px;top:{{#d.selectionY}}px;"></div>
         </div>
-        <div class="value" style="margin-top:{{if #d.height < 12}}{{-#d.height-14}}{{else}}{{-#d.height}}{{/}}px;{{if #d.height < 10}}color:#818181{{/}}">
-          {{selection[#i].value}}</div>
+        <div class="value {{if #d.height < 20}}outside{{/}}" style="margin-top:{{if #d.height < 22}}{{-#d.height-24}}{{else}}{{-#d.height}}{{/}}px;">
+          {{selection[#i].value}}
+          <br>
+          <span class=denominator>
+            {{data[#i].value}}
+          </span>
+        </div>
         <div class="letter" style="opacity:{{if +#d.selectionHeight}}1{{else}}0.3{{/}}">{{data[#i].key || "N/A"}}</div>
       </div>
     {{/each}}
@@ -130,7 +135,7 @@
 <template id="definition" attributes="char">
   <div class="bars">
     {{if @char.pinyin}}
-      <audio controls src="https://s3.amazonaws.com/pinyin/audio/{{@char.pinyin}}.mp3"></audio>
+      <audio controls src="https://s3.amazonaws.com/pinyin/audio/{{firstPinyin(@char.pinyin)}}.mp3"></audio>
     {{/if}}
     <p>
     {{if numDefinitions}}

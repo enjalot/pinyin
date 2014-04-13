@@ -39,3 +39,7 @@ Definition.prototype.fetch = function() {
     model.set("numDefinitions", data.length);
   });
 }
+Definition.prototype.firstPinyin = function(pin) {
+  console.log("pin", pin)
+  return pin.split(",")[0];
+}
