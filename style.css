@@ -70,6 +70,7 @@ h2 {
   width: 25px;
   margin: 0px 3px;
   display: inline-block;
+  padding-bottom: 10px;
 }
 .letter {
   font-family: 'Source Code Pro', "Helvetica Neue", Helvetica, sans-serif;
@@ -126,6 +127,7 @@ input {
 .inner {
   width: 100%;
   position:relative;
+  display: inline-block;
 }
 .outside {
   color:#818181;
