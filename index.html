@@ -16,11 +16,9 @@
 <div id=container>
 <div id=content>
   <h1>How does typing in Chinese work?</h1>
-  {{if _page.IE}}
-    <div class="iewarning">
+    <div id="iewarning" style="display:none">
       This page works best in <a href="http://google.com/chrome">Chrome</a> or <a href="http://www.mozilla.org/en-US/firefox/new/">Firefox</a>.
     </div>
-  {{/if}}
     <div id="explanation">
       <p>
       You may have heard that there are thousands of Chinese characters and wondered how big the keyboards must be in China. Long before computers, a system for writing Chinese characters using Roman letters was devised so that Chinese could be written phonetically.
@@ -162,6 +160,10 @@
 
     <script src="lib/derby-standalone.min.js"></script>
     <script>
+      if(navigator.appName.indexOf("Internet Explorer")!=-1){
+        // warn the user
+        document.getElementById("iewarning").setAttribute("style", "");
+      }
       ////////////////////// <BOILER PLATE> ///////////////////////////////
       // setup standalone derby
       var app = derby.createApp();
@@ -232,10 +234,6 @@
         }
         filter();
       });
-      if(navigator.appName.indexOf("Internet Explorer")!=-1){
-        // warn the user
-        model.set("_page.IE", true);
-      }
     </script>
   </body>
 </html>
