@@ -166,6 +166,7 @@
       for (var i = 0; i < templates.length; i++) {
         var template = templates[i];
         app.views.register(template.id, template.innerHTML, template.dataset);
+        template.parentNode.removeChild(template);
       }
       ////////////////////// </BOILER PLATE> ///////////////////////////////
       // setup our histogram component (defined in histogram.js)
@@ -186,6 +187,7 @@
       // when the user clicks on the input this gets called
       app.proto.clicker = function() {
         location.href='#pinyin'
+        document.querySelector("input.pinyin").focus();
       };
       app.proto.filter = function() {};
       app.proto.split = function(word) {
