@@ -130,6 +130,9 @@ input {
 .outside {
   color:#818181;
 }
+.hidden {
+  visibility: hidden;
+}
 .denominator {
   border-top: 1px solid #ebebeb;
   top: 2px;

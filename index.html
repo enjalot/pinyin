@@ -78,7 +78,6 @@
       <br>
       </div>
       <div class="definitions">
-      
         <view name="definition" char="{{_page.selectedChar}}"></view>
       </div>
     </div>
@@ -101,7 +100,7 @@
         <a href="https://twitter.com/derbyjs"> derbyjs</a>.
       </p>
       <p>
-        Thanks to <a href="https://twitter.com/andreasmb">andreasmb</a>, <a href="https://twitter.com/vicapow">vicapow</a> and <a href="http://twitter.com/shirleyxywu">shirleyxywu</a> for design help.
+        Thanks to <a href="https://twitter.com/andreasmb">andreasmb</a>, <a href="https://twitter.com/vicapow">vicapow</a>, <a href="http://twitter.com/shirleyxywu">shirleyxywu</a> and <a href="https://twitter.com/danielledai">danielledai</a> for design help.
       </p>
 
       <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://enjalot.github.io/pinyin" data-text="How does typing in Chinese work?" data-via="enjalot">Tweet</a>
@@ -115,11 +114,11 @@
 <template id="histo" attributes="data selection height">
   <div class="bars">
     {{each layout as #d,#i}}
-      <div class="bar-container">
+      <div class="bar-container" on-mouseover="model.set('hovered', #i)" on-mouseout="model.set('hovered', null)">
         <div class="bar {{if #d.selectionHeight}}highlight{{/if}}" style="height:{{#d.height}}px;top:{{#d.y}}px;">
           <div class="inner" style="height:{{#d.selectionHeight}}px;top:{{#d.selectionY}}px;"></div>
         </div>
-        <div class="value {{if #d.height < 20}}outside{{/}}" style="margin-top:{{if #d.height < 22}}{{-#d.height-24}}{{else}}{{-#d.height}}{{/}}px;">
+        <div class="value {{if #d.selectionHeight/#d.height < 0.5 || #d.selectionHeight < 22}}outside{{/}} {{if hovered !== #i}}hidden{{/if}}" style="margin-top:{{if #d.height < 22}}{{-#d.height-24}}{{else}}{{-#d.height}}{{/}}px;">
           {{selection[#i].value}}
           <br>
           <span class=denominator>
