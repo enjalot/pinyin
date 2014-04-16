@@ -55,7 +55,6 @@ function getTone(pin) {
   return "";
 }
 
-
 function cross() {
   var xf = crossfilter();
   var starts = xf.dimension(function(d) {
