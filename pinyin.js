@@ -54,6 +54,12 @@ function getTone(pin) {
   }
   return "";
 }
+function getPart(pin) {
+  if(getInitial(pin)) return "initial";
+  if(getFinal(pin)) return "final";
+  if(getTone(pin)) return "tone";
+  return "";
+}
 
 function cross() {
   var xf = crossfilter();

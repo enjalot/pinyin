@@ -24,7 +24,26 @@ input.pinyin {
   border-radius: 6px;
   padding: 5px;
   margin-bottom: 10px;
+  color: black;
+
+  background: #e4e4e4;
+	background: -webkit-linear-gradient(#e4e4e4, #e5e5e5);
+	background: -moz-linear-gradient(#e4e4e4, #e5e5e5);
+	background: -o-linear-gradient(#e4e4e4, #e5e5e5);
+	background: -ms-linear-gradient(#e4e4e4, #e5e5e5);
+	background: linear-gradient(#e4e4e4, #e5e5e5);
+	box-shadow: 0 0 5px rgba(255,0,0,.2), inset 0 0 5px rgba(255,0,0,.1), 0 2px 0 #000;
+	outline: none;
 }
+.tryme {
+  /* taken from http://codepen.io/jackrugile/pen/ABeIi?editors=111 */
+	-webkit-animation: glow 800ms ease-out infinite alternate;
+	-moz-animation: glow 800ms ease-out infinite alternate;
+	-o-animation: glow 800ms ease-out infinite alternate;
+	-ms-animation: glow 800ms ease-out infinite alternate;
+	animation: glow 800ms ease-out infinite alternate;
+}
+
 
 h1 {
   font-size: 48px;
@@ -71,6 +90,7 @@ h2 {
   margin: 0px 3px;
   display: inline-block;
   padding-bottom: 10px;
+  cursor: pointer;
 }
 .letter {
   font-family: 'Source Code Pro', "Helvetica Neue", Helvetica, sans-serif;
@@ -235,4 +255,58 @@ input {
 .icon-loading {
   width: 2em;
   height: 2em;
+}
+
+
+@-webkit-keyframes glow {
+    0% {
+		box-shadow: 0 0 5px rgba(255,0,0,.2), inset 0 0 5px rgba(255,0,0,.1), 0 2px 0 #000;
+    }	
+    100% {
+		box-shadow: 0 0 20px rgba(255,0,0,.4), inset 0 0 7px rgba(255,0,0,.2), 0 2px 0 #000;
+    }
+}
+
+@-moz-keyframes glow {
+    0% {
+		border-color: #393;
+		box-shadow: 0 0 5px rgba(0,255,0,.2), inset 0 0 5px rgba(0,255,0,.1), 0 2px 0 #000;
+    }	
+    100% {
+		border-color: #e42222;
+		box-shadow: 0 0 20px rgba(0,255,0,.6), inset 0 0 10px rgba(0,255,0,.4), 0 2px 0 #000;
+    }
+}
+
+@-o-keyframes glow {
+    0% {
+		border-color: #393;
+		box-shadow: 0 0 5px rgba(0,255,0,.2), inset 0 0 5px rgba(0,255,0,.1), 0 2px 0 #000;
+    }	
+    100% {
+		border-color: #e42222;
+		box-shadow: 0 0 20px rgba(0,255,0,.6), inset 0 0 10px rgba(0,255,0,.4), 0 2px 0 #000;
+    }
+}
+
+@-ms-keyframes glow {
+    0% {
+		border-color: #393;
+		box-shadow: 0 0 5px rgba(0,255,0,.2), inset 0 0 5px rgba(0,255,0,.1), 0 2px 0 #000;
+    }	
+    100% {
+		border-color: #e42222;
+		box-shadow: 0 0 20px rgba(0,255,0,.6), inset 0 0 10px rgba(0,255,0,.4), 0 2px 0 #000;
+    }
+}
+
+@keyframes glow {
+    0% {
+		border-color: #fff;
+		box-shadow: 0 0 5px rgba(255,0,0,.2), inset 0 0 5px rgba(255,0,0,.1), 0 2px 0 #000;
+    }	
+    100% {
+		border-color: #e42222;
+		box-shadow: 0 0 20px rgba(255,0,0,.6), inset 0 0 10px rgba(255,0,0,.4), 0 2px 0 #000;
+    }
 }

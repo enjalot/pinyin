@@ -40,7 +40,7 @@
 
     <div id="text">
       <h2>Try typing some Pinyin</h2>
-      <input id="pinyin" class="pinyin" maxlength="6" value={{_page.pinyin}} on-keyup="filter()" on-click="clicker()">
+      <input id="pinyin" class="pinyin {{if !_page.pinyin}}tryme{{/}}" maxlength="6" value={{_page.pinyin}} on-keyup="filter()" on-click="clicker()">
       <div class="examples">
         e.g.
         <span class="example">我: wo3</span>
@@ -63,21 +63,21 @@
         {{if _page.loadingSingles }}
           <view name="loader"></view>
         {{/}}
-        <view name=histo data={{_page.initialGroups.starts}} selection={{_page.groups.starts}} height=80></view>
+        <view name=histo data={{_page.initialGroups.starts}} selection={{_page.groups.starts}} on-data=clickedHisto("initial") height=80></view>
       </div>
       <div class="finals">
         <h2>Possible word endings</h2>
         {{if _page.loadingSingles }}
           <view name="loader"></view>
         {{/}}
-       <view name=histo data={{_page.initialGroups.ends}} selection={{_page.groups.ends}} height=80></view>
+       <view name=histo data={{_page.initialGroups.ends}} selection={{_page.groups.ends}} on-data=clickedHisto("final") height=80></view>
       </div>
       <div class="tones">
         <h2>Possible tones</h2>
         {{if _page.loadingSingles }}
           <view name="loader"></view>
         {{/}}
-        <view name=histo data={{_page.initialGroups.tones}} selection={{_page.groups.tones}} height=80></view>
+        <view name=histo data={{_page.initialGroups.tones}} selection={{_page.groups.tones}} on-data=clickedHisto("tone") height=80></view>
       </div>
 
     </div>
@@ -129,7 +129,7 @@
 <script type="text/template" id="histo" attributes="data selection height">
   <div class="bars">
     {{each layout as #d,#i}}
-      <div class="bar-container" on-mouseover="model.set('hovered', #i)" on-mouseout="model.set('hovered', null)">
+      <div class="bar-container" on-mouseover="model.set('hovered', #i)" on-mouseout="model.set('hovered', null)" on-click="clicked(selection[#i])">
         <div class="bar {{if #d.selectionHeight}}highlight{{/if}}" style="height:{{#d.height}}px;top:{{#d.y}}px;">
           <div class="inner" style="height:{{#d.selectionHeight}}px;top:{{#d.selectionY}}px;"></div>
         </div>
@@ -140,7 +140,7 @@
             {{data[#i].value}}
           </span>
         </div>
-        <div class="letter" style="opacity:{{if +#d.selectionHeight}}1{{else}}0.3{{/}}">{{data[#i].key || "N/A"}}</div>
+        <div class="letter" style="opacity:{{if +#d.selectionHeight}}1{{else}}0.3{{/}}" on-click="clicked(selection[#i])">{{data[#i].key || "N/A"}}</div>
       </div>
     {{/each}}
   </div>
@@ -224,6 +224,33 @@
       app.proto.filter = function() {};
       app.proto.split = function(word) {
         return word.split("");
+      }
+      app.proto.clickedHisto = function(part, data) {
+        var pinyin = data.key;
+        var oStart = model.get("_page.start");
+        var oEnd = model.get("_page.end");
+        var oTone = model.get("_page.tone");
+        if(part === "initial") {
+          if(oStart === pinyin) {
+            oStart = "";
+          } else {
+            oStart = pinyin;
+          }
+        } else if(part === "final") {
+          if(oEnd === pinyin) {
+            oEnd = "";
+          } else {
+            oEnd = pinyin;
+          }
+        } else if(part === "tone") {
+          if(oTone === pinyin) {
+            oTone = "";
+          } else {
+            oTone = pinyin;
+          }
+        }
+        model.set("_page.pinyin", oStart + oEnd + oTone);
+        app.proto.filter();
       }
 
       // get some data asynchronously!

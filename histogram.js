@@ -53,3 +53,6 @@ Histogram.prototype.transform = function() {
   model.setDiffDeep("layout", layout);
 };
 
+Histogram.prototype.clicked = function(d) {
+  this.emit("data", d);
+}
