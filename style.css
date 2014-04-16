@@ -204,7 +204,8 @@ input {
 }
 
 .selected-char {
-  font-size: 35px;
+  transform: scale(1.2);
+  /*font-size: 35px;*/
   font-weight: 700;
   color: #444;
 }
@@ -231,3 +232,7 @@ input {
   padding: 10px;
 }
 
+.icon-loading {
+  width: 2em;
+  height: 2em;
+}

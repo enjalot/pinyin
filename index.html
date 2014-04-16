@@ -12,7 +12,7 @@
   </head>
   <body>
 
-<template id="body">
+<script type="text/template" id="body">
 <div id=container>
 <div id=content>
   <h1>How does typing in Chinese work?</h1>
@@ -60,14 +60,23 @@
     <div id="histos">
       <div class="initials">
         <h2>Possible word beginnings</h2>
+        {{if _page.loadingSingles }}
+          <view name="loader"></view>
+        {{/}}
         <view name=histo data={{_page.initialGroups.starts}} selection={{_page.groups.starts}} height=80></view>
       </div>
       <div class="finals">
         <h2>Possible word endings</h2>
-        <view name=histo data={{_page.initialGroups.ends}} selection={{_page.groups.ends}} height=80></view>
+        {{if _page.loadingSingles }}
+          <view name="loader"></view>
+        {{/}}
+       <view name=histo data={{_page.initialGroups.ends}} selection={{_page.groups.ends}} height=80></view>
       </div>
       <div class="tones">
         <h2>Possible tones</h2>
+        {{if _page.loadingSingles }}
+          <view name="loader"></view>
+        {{/}}
         <view name=histo data={{_page.initialGroups.tones}} selection={{_page.groups.tones}} height=80></view>
       </div>
 
@@ -107,14 +116,17 @@
       </p>
 
       <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://enjalot.github.io/pinyin" data-text="How does typing in Chinese work?" data-via="enjalot">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
     </div>
 </div>
 </div>
-</template>
+</script>
+
+<!-- twitter button script -->
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
 
 <!-- such readability -->
-<template id="histo" attributes="data selection height">
+<script type="text/template" id="histo" attributes="data selection height">
   <div class="bars">
     {{each layout as #d,#i}}
       <div class="bar-container" on-mouseover="model.set('hovered', #i)" on-mouseout="model.set('hovered', null)">
@@ -132,18 +144,23 @@
       </div>
     {{/each}}
   </div>
-</template>
+</script>
 
-<template id="definition" attributes="char">
+<script type="text/template" id="definition" attributes="char">
   <div class="bars">
     {{if @char.pinyin}}
-      <audio controls src="https://s3.amazonaws.com/pinyin/audio/{{firstPinyin(@char.pinyin)}}.mp3"></audio>
+      <audio controls src="https://s3.amazonaws.com/pinyin/audio/{{firstPinyin(@char.pinyin)}}.mp3"></audio><br>
+      <img src="https://service.goodcharacters.com/images/han/{{@char.char}}.gif">
     {{/if}}
     <p>
     {{if numDefinitions}}
       {{numDefinitions}} Words with definitions.
     {{else}}
       Click on a character to see the words it belongs to and their definitions.
+    {{/if}}
+    {{if loading}}
+      <br><br>
+      <view name="loader"></view>
     {{/if}}
     </p>
     {{each definition as #d,#i}}
@@ -156,7 +173,16 @@
       </div>
     {{/each}}
   </div>
-</template>
+</script>
+<script type="text/template" id="loader">
+  <!-- taken from: http://codepen.io/jxnblk/pen/Byvzr -->
+  <svg class="icon-loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+    <path opacity=".25" d="M16 0 A16 16 0 0 0 16 32 A16 16 0 0 0 16 0 M16 4 A12 12 0 0 1 16 28 A12 12 0 0 1 16 4"/>
+    <path d="M16 0 A16 16 0 0 1 32 16 L28 16 A12 12 0 0 0 16 4z">
+      <animateTransform attributeName="transform"          type="rotate" from="0 16 16" to="360 16 16" dur=".8s" repeatCount="indefinite" />
+    </path>
+  </svg>
+</script>
 
     <script src="lib/derby-standalone.min.js"></script>
     <script>
@@ -168,8 +194,7 @@
       // setup standalone derby
       var app = derby.createApp();
       // setup our templates
-      //var templates = document.querySelectorAll('script[type="text/template"]');
-      var templates = document.querySelectorAll('template');
+      var templates = document.querySelectorAll('script[type="text/template"]');
       for (var i = 0; i < templates.length; i++) {
         var template = templates[i];
         app.views.register(template.id, template.innerHTML, template.dataset);

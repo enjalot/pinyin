@@ -25,8 +25,9 @@ Definition.prototype.fetch = function() {
   }
   var s3url = "https://s3.amazonaws.com/pinyin/characters/charhash/";
   var url = s3url + encodeURIComponent(character["char"]) + ".csv";
-  console.log("url", url);
+  model.set("loading", true)
   d3.csv(url, function(err, data) {
+    model.set("loading", false)
     if(err) {
       model.set("error", err);
       console.log("error", err);
